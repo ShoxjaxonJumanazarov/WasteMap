@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #050A0E;
+  --color-accent: #00FFB2;
+  --color-critical: #FF3B5C;
+  --color-warning: #FF8C42;
+  --color-normal: #00FFB2;
+  --color-surface: #0D1B24;
+  --color-surface2: #112233;
+  --font-heading: 'Syne', sans-serif;
+  --font-body: 'Instrument Sans', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #050A0E;
+  font-family: 'Instrument Sans', sans-serif;
+  color: #e2e8f0;
+}
+
+/* Scanline overlay */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+}
+
+/* Pulsing marker animations */
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes glow-critical {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 59, 92, 0.6); }
+  50% { box-shadow: 0 0 20px 6px rgba(255, 59, 92, 0.9); }
+}
+
+@keyframes glow-warning {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(255, 140, 66, 0.6); }
+  50% { box-shadow: 0 0 20px 6px rgba(255, 140, 66, 0.9); }
+}
+
+@keyframes glow-normal {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(0, 255, 178, 0.4); }
+  50% { box-shadow: 0 0 16px 4px rgba(0, 255, 178, 0.7); }
+}
+
+.pulse-ring {
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+.pulse-ring-2 {
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite 0.5s;
+}
+
+.pulse-ring-3 {
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite 1s;
+}
+
+.blink {
+  animation: blink 1.2s ease-in-out infinite;
+}
+
+/* Leaflet overrides */
+.leaflet-container {
+  background: #050A0E !important;
+  font-family: 'Instrument Sans', sans-serif;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #0D1B24;
+  border: 1px solid #00FFB2;
+  border-radius: 8px;
+  color: #e2e8f0;
+}
+
+.leaflet-popup-tip {
+  background: #0D1B24;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #050A0E;
+}
+::-webkit-scrollbar-thumb {
+  background: #1a3040;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00FFB2;
+}
+
+/* Marker custom styles */
+.marker-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
