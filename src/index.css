@@ -1,0 +1,206 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+@theme {
+  --color-bg-primary: #050A0E;
+  --color-bg-secondary: #0A1118;
+  --color-bg-card: #0D1720;
+  --color-bg-hover: #111F2D;
+  --color-accent: #00FFB2;
+  --color-critical: #FF3B5C;
+  --color-warning: #FF8C42;
+  --color-normal: #00FFB2;
+  --color-text-primary: #E8F0F2;
+  --color-text-secondary: #6B8A99;
+  --color-border: #1A2A38;
+  --font-heading: "Syne", sans-serif;
+  --font-body: "Instrument Sans", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+}
+
+/* Scanline overlay */
+.scanline-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 178, 0.015) 2px,
+    rgba(0, 255, 178, 0.015) 4px
+  );
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
+}
+
+/* Pulsing marker animations */
+@keyframes pulse-critical {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+@keyframes pulse-warning {
+  0% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+@keyframes pulse-normal {
+  0% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+.marker-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marker-dot {
+  border-radius: 50%;
+  position: absolute;
+}
+
+.marker-ring {
+  position: absolute;
+  border-radius: 50%;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-out;
+}
+
+.marker-critical .marker-dot {
+  width: 14px;
+  height: 14px;
+  background: #FF3B5C;
+  box-shadow: 0 0 12px #FF3B5C, 0 0 24px rgba(255, 59, 92, 0.4);
+}
+.marker-critical .marker-ring {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #FF3B5C;
+  animation-name: pulse-critical;
+}
+.marker-critical .ring-1 { animation-duration: 2s; animation-delay: 0s; }
+.marker-critical .ring-2 { animation-duration: 2s; animation-delay: 0.5s; }
+.marker-critical .ring-3 { animation-duration: 2s; animation-delay: 1s; }
+
+.marker-warning .marker-dot {
+  width: 11px;
+  height: 11px;
+  background: #FF8C42;
+  box-shadow: 0 0 10px #FF8C42, 0 0 20px rgba(255, 140, 66, 0.3);
+}
+.marker-warning .marker-ring {
+  width: 11px;
+  height: 11px;
+  border: 2px solid #FF8C42;
+  animation-name: pulse-warning;
+}
+.marker-warning .ring-1 { animation-duration: 2.2s; animation-delay: 0s; }
+.marker-warning .ring-2 { animation-duration: 2.2s; animation-delay: 0.6s; }
+.marker-warning .ring-3 { animation-duration: 2.2s; animation-delay: 1.2s; }
+
+.marker-normal .marker-dot {
+  width: 8px;
+  height: 8px;
+  background: #00FFB2;
+  box-shadow: 0 0 8px #00FFB2, 0 0 16px rgba(0, 255, 178, 0.3);
+}
+.marker-normal .marker-ring {
+  width: 8px;
+  height: 8px;
+  border: 2px solid #00FFB2;
+  animation-name: pulse-normal;
+}
+.marker-normal .ring-1 { animation-duration: 2.5s; animation-delay: 0s; }
+.marker-normal .ring-2 { animation-duration: 2.5s; animation-delay: 0.7s; }
+.marker-normal .ring-3 { animation-duration: 2.5s; animation-delay: 1.4s; }
+
+/* Leaflet overrides */
+.leaflet-container {
+  background: #050A0E !important;
+}
+.leaflet-control-zoom a {
+  background: #0D1720 !important;
+  color: #00FFB2 !important;
+  border-color: #1A2A38 !important;
+}
+.leaflet-control-zoom a:hover {
+  background: #111F2D !important;
+}
+.leaflet-control-attribution {
+  background: rgba(5, 10, 14, 0.8) !important;
+  color: #6B8A99 !important;
+  font-size: 10px !important;
+}
+.leaflet-control-attribution a {
+  color: #00FFB2 !important;
+}
+
+/* Blinking animation */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+.animate-blink {
+  animation: blink 1.2s ease-in-out infinite;
+}
+
+/* Glow text */
+.glow-text {
+  text-shadow: 0 0 8px rgba(0, 255, 178, 0.5), 0 0 16px rgba(0, 255, 178, 0.2);
+}
+
+/* Alert slide in */
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out forwards;
+}
+
+/* Fade in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Progress bar shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.progress-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite linear;
+}
